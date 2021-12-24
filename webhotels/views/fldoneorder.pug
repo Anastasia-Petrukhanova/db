@@ -8,15 +8,15 @@ style.
   margin:0 auto;
   padding:15px;
   }
-form(action='/', method='post')
+form(action='/findorder', method='post', target='myorder')
   fieldset
     label
       | Дата с:
-      input(type='date')
+      input(type='date', name='Dst')
     br
     label
       | Дата по:
-      input(type='date')
+      input(type='date', name='Den')
     br
     label
       button(type='submit') Поиск

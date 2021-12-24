@@ -111,9 +111,22 @@ function InsertUser(loginUser, passUser, mailU, phoneU, iU, fU, oU) {
     connection.execSql(request);
 }
 
+function InsertHistory (idBook) {
+    sql3 = "INSERT INTO History_opr (id_book, id_employee, status, time) VALUES (@idBook, nuul, N'Ожидается подтверждение', getdate())";
+    request3 = new Request(sql1, function (err, rowCount) {
+        if (err) {
+            console.log(err);
+        } else {
+            beginTransaction();
+        }
+    });
+    request3.addParameter('idBook', TYPES.UniqueIdentifier, idBook);
+    connection.execSql(request3);
+}
+
 ///?????????
 function InsertBook(User, Room, Start, End) {
-    sql1 = "INSERT INTO Book (id_client, id_room, start, end) VALUES (@idClient, @idRoom, @dStart, @dEnd)";
+    sql1 = "INSERT INTO Book (id_client, id_room, [start], [end]) VALUES (@idClient, @idRoom, @dStart, @dEnd)";
     request1 = new Request(sql1, function (err, rowCount) {
         if (err) {
             console.log(err);
@@ -126,9 +139,62 @@ function InsertBook(User, Room, Start, End) {
     request1.addParameter('dStart', TYPES.Date, Start);
     request1.addParameter('dEnd', TYPES.Date, End);
     console.log(sql1);
+    request1.on('doneInProc', function (rowCount, more, rows) {
+        var idBook = "";
+        sql2 = "select Book.id_key from Book where Book.start = '";
+        sql2 += Start;
+        sql2 += "' and Book.end = '";
+        sql2 += End;
+        sql2 += "' and Book.id_client like '";
+        sql2 += User;
+        sql2 += "and Book.id_room like '";
+        sql2 += Room;
+        sql2 += "'";
+        request2 = new Request(sql2, function (err) {
+            if (err) {
+                console.log(err);
+            }
+        });
+        var result = "";
+        var Resrows = [];
+        request2.on('row', function (columns) {
+            console.log('row');
+            columns.forEach(function (column) {
+                if (column.value === null) {
+                    console.log('NULL');
+                } else {
+                    result += column.value + " ";
+                    idBook = column.value;
+                }
+            });
+            console.log(result);
+            result = "";
+        });
+        request2.on('doneInProc', function (rowCount, more, rows) {
+            console.log(rowCount + ' rows returned');
+            console.log(rows);
+            sql3 = "INSERT INTO History_opr (id_book, id_employee, status, [time]) VALUES (@idBook, nuul, N'Ожидается подтверждение', getdate())";
+            request3 = new Request(sql1, function (err, rowCount) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    beginTransaction();
+                }
+            });
+            request3.addParameter('idBook', TYPES.UniqueIdentifier, idBook);
+            connection.execSql(request3);
+            Resrows = rows.slice;
+            console.log(' rows returned');
+            console.log(Resrows);
+            //response.render("ltnomer", { noms: rows });;
+        });
+        console.log("req2")
+        connection.execSql(request2);
+    });
+    console.log("req3")
     connection.execSql(request1);
 
-    var idBook = "";
+    {/*var idBook = "";
     sql2 = "select Book.id_key from Book where Book.start = '";
     sql2 += Start;
     sql2 += "' and Book.end = '";
@@ -167,9 +233,9 @@ function InsertBook(User, Room, Start, End) {
         //response.render("ltnomer", { noms: rows });;
     });
 
-    connection.execSql(request2);
+    connection.execSql(request2);*/}
 
-    sql3 = "INSERT INTO History_opr (id_book, id_employee, status, time) VALUES (@idBook, nuul, N'Ожидается подтверждение', getdate())";
+    {/*sql3 = "INSERT INTO History_opr (id_book, id_employee, status, time) VALUES (@idBook, nuul, N'Ожидается подтверждение', getdate())";
     request3 = new Request(sql1, function (err, rowCount) {
         if (err) {
             console.log(err);
@@ -178,7 +244,7 @@ function InsertBook(User, Room, Start, End) {
         }
     });
     request3.addParameter('idBook', TYPES.UniqueIdentifier, idBook);
-    connection.execSql(request3);
+    connection.execSql(request3);*/}
 }
 
 app.set("view engine","pug");
@@ -316,12 +382,12 @@ app.get("/myorders.pug", function (request, response) {
     response.render("myorders");;
 });
 
-///?
+///+
 app.get("/flmyorder.pug", function (request, response) {
     response.render("flmyorder");;
 });
 
-///?
+///+
 app.get("/ltmyorders.pug", function (request, response) {
     //const nomid = request.params.id;
     sql = "select (convert(nvarchar, [Book].[start]) + ' - ' + convert(nvarchar, [Book].[end])), [History_opr].[status], [Room].[number]\n" +
@@ -358,11 +424,11 @@ app.get("/ltmyorders.pug", function (request, response) {
         Resrows = rows.slice;
         console.log(' rows returned');
         console.log(Resrows);
-        response.render("neworder", { dStart, dEnd, noms: rows, idnom: nomid });;
+        response.render("ltmyorders", { noms: rows });;
     });
     connection.execSql(request);
 
-    response.render("ltmyorders");;
+    //response.render("ltmyorders");;
 });
 
 
@@ -418,15 +484,14 @@ app.post("/addbron/:id", urlencodedParser, function (request, response) {
 ////??????
 app.post("/commBron", urlencodedParser, function (request, response) {
     InsertBook(idUser, request.body.idNom, dStart, dEnd);
-    response.end("Запрос на бронирование отправлен");
 });
 
-///????????
+///+
 app.post("/bookFind", urlencodedParser, function (request, response) {
     dStart = request.body.Start;
     dEnd = request.body.End;
 
-    sql = "select [Room].[id], [Room].[number], [Room].[photo], [Room].[capacity] , string_agg(CONCAT([Extra].[name], ''), ', '), [Room].[cost], max('addbron/'+CONVERT(varchar, Room.id))\n" +
+    sql = "select [Room].[id], [Room].[number], [Room].[photo], [Room].[capacity], string_agg(CONCAT([Extra].[name], ''), ', '), [Room].[cost], max('addbron/'+CONVERT(varchar, Room.id))\n" +
         "from [Room] \n" +
         "\tinner join [Room_Extra] on [Room].[id] = [Room_Extra].[id_room]\n" +
         "\tinner join [Extra] on [Extra].[id] = [Room_Extra].[id_extra]\n" +
@@ -476,73 +541,103 @@ app.post("/bookFind", urlencodedParser, function (request, response) {
         "\t\t\t\t\tinner join [Book] on [Room].[id] = [Book].[id_room]\n" +
         "\t\t\t\t\tinner join [History_opr] on [Book].[id_key] = [History_opr].[id_book]\n" +
         "\t\t\t\twhere [History_opr].[status] like 'Бронирование отменено'))\n" +
-        "group by [Room].[number], [Room].[capacity], [Room].[cost], [Room].[photo], [Room].[id]  having ";
+        "group by [Room].[number], [Room].[capacity], [Room].[cost], [Room].[photo], [Room].[id] ";
     console.log(sql);
     count = 0;
     if (request.body.aUtug == 1) {
+        if (count == 0) {
+            sql += "having "
+        }
         if (count > 0) {
-            sql += 'and'
+            sql += 'and '
         }
         sql += "string_agg(CONCAT([Extra].[name], ''), ', ') like '%утюг%' "
         count += 1;
     }
     if (request.body.aSafe == 1) {
+        if (count == 0) {
+            sql += "having "
+        }
         if (count > 0) {
-            sql += 'and'
+            sql += 'and '
         }
         sql += "string_agg(CONCAT([Extra].[name], ''), ', ') like '%сейф%' "
         count += 1;
     }
     if (request.body.aTV == 1) {
+        if (count == 0) {
+            sql += "having "
+        }
         if (count > 0) {
-            sql += 'and'
+            sql += 'and '
         }
         sql += "string_agg(CONCAT([Extra].[name], ''), ', ') like '%телевизор%' "
         count += 1;
     }
     if (request.body.aPosuda == 1) {
+        if (count == 0) {
+            sql += "having "
+        }
         if (count > 0) {
-            sql += 'and'
+            sql += 'and '
         }
         sql += "string_agg(CONCAT([Extra].[name], ''), ', ') like '%посуда%' "
         count += 1;
     }
     if (request.body.aFen == 1) {
+        if (count == 0) {
+            sql += "having "
+        }
         if (count > 0) {
-            sql += 'and'
+            sql += 'and '
         }
         sql += "string_agg(CONCAT([Extra].[name], ''), ', ') like '%фен%' "
         count += 1;
     }
     if (request.body.aWiFi == 1) {
+        if (count == 0) {
+            sql += "having "
+        }
         if (count > 0) {
-            sql += 'and'
+            sql += 'and  '
         }
         sql += "string_agg(CONCAT([Extra].[name], ''), ', ') like '%Wi-Fi%' "
         count += 1;
     }
     if (request.body.aKholod == 1) {
+        if (count == 0) {
+            sql += "having "
+        }
         if (count > 0) {
-            sql += 'and'
+            sql += 'and '
         }
         sql += "string_agg(CONCAT([Extra].[name], ''), ', ') like '%холодильник%' "
         count += 1;
     }
     if (request.body.aKond == 1) {
+        if (count == 0) {
+            sql += "having "
+        }
         if (count > 0) {
-            sql += 'and'
+            sql += 'and '
         }
         sql += "string_agg(CONCAT([Extra].[name], ''), ', ') like '%кондиционер%' "
         count += 1;
     }
     if (request.body.aLamp == 1) {
+        if (count == 0) {
+            sql += "having "
+        }
         if (count > 0) {
-            sql += 'and'
+            sql += 'and '
         }
         sql += "string_agg(CONCAT([Extra].[name], ''), ', ') like '%настольная лампа%' "
         count += 1;
     }
     if (request.body.aChay == 1) {
+        if (count == 0) {
+            sql += "having "
+        }
         if (count > 0) {
             sql += 'and'
         }
@@ -595,74 +690,104 @@ app.post("/nomerfind", urlencodedParser, function (request, response) {
     sql += "%'\n" +
         "\tand [Room].[cost] <= "
     sql += request.body.Price;
-    sql += "group by [Room].[number], [Room].[capacity], [Room].[cost], [Room].[photo], [Room].[id] having ";
+    sql += "group by [Room].[number], [Room].[capacity], [Room].[cost], [Room].[photo], [Room].[id] ";
     count = 0;
     if (request.body.aUtug == 1) {
+        if (count == 0) {
+            sql += "having "
+        }
         if (count > 0) {
-            sql += 'and'
+            sql += 'and '
         }
         sql += "string_agg(CONCAT([Extra].[name], ''), ', ') like '%утюг%' "
         count += 1;
     }
     if (request.body.aSafe == 1) {
+        if (count == 0) {
+            sql += "having "
+        }
         if (count > 0) {
-            sql += 'and'
+            sql += 'and '
         }
         sql += "string_agg(CONCAT([Extra].[name], ''), ', ') like '%сейф%' "
         count += 1;
     }
     if (request.body.aTV == 1) {
+        if (count == 0) {
+            sql += "having "
+        }
         if (count > 0) {
-            sql += 'and'
+            sql += 'and '
         }
         sql += "string_agg(CONCAT([Extra].[name], ''), ', ') like '%телевизор%' "
         count += 1;
     }
     if (request.body.aPosuda == 1) {
+        if (count == 0) {
+            sql += "having "
+        }
         if (count > 0) {
-            sql += 'and'
+            sql += 'and '
         }
         sql += "string_agg(CONCAT([Extra].[name], ''), ', ') like '%посуда%' "
         count += 1;
     }
     if (request.body.aFen == 1) {
+        if (count == 0) {
+            sql += "having "
+        }
         if (count > 0) {
-            sql += 'and'
+            sql += 'and '
         }
         sql += "string_agg(CONCAT([Extra].[name], ''), ', ') like '%фен%' "
         count += 1;
     }
     if (request.body.aWiFi == 1) {
+        if (count == 0) {
+            sql += "having "
+        }
         if (count > 0) {
-            sql += 'and'
+            sql += 'and '
         }
         sql += "string_agg(CONCAT([Extra].[name], ''), ', ') like '%Wi-Fi%' "
         count += 1;
     }
     if (request.body.aKholod == 1) {
+        if (count == 0) {
+            sql += "having "
+        }
         if (count > 0) {
-            sql += 'and'
+            sql += 'and '
         }
         sql += "string_agg(CONCAT([Extra].[name], ''), ', ') like '%холодильник%' "
         count += 1;
     }
     if (request.body.aKond == 1) {
+        if (count == 0) {
+            sql += "having "
+        }
         if (count > 0) {
-            sql += 'and'
+            sql += 'and '
         }
         sql += "string_agg(CONCAT([Extra].[name], ''), ', ') like '%кондиционер%' "
         count += 1;
     }
     if (request.body.aLamp == 1) {
+        if (count == 0) {
+            sql += "having "
+        }
         if (count > 0) {
-            sql += 'and'
+            sql += 'and '
         }
         sql += "string_agg(CONCAT([Extra].[name], ''), ', ') like '%настольная лампа%' "
         count += 1;
     }
     if (request.body.aChay == 1) {
+        if (count == 0) {
+            sql += "having "
+        }
         if (count > 0) {
-            sql += 'and'
+            sql += 'and '
         }
         sql += "string_agg(CONCAT([Extra].[name], ''), ', ') like '%электрочайник%' "
         count += 1;
@@ -747,7 +872,41 @@ app.get("/fldoneorder.pug", function (request, response) {
 });
 
 app.get("/ltdoneorder.pug", function (request, response) {
-    response.render("ltdoneorder");;
+    sql = "select (convert(nvarchar, [Book].[start]) + ' - ' + convert(nvarchar, [Book].[end])), [History_opr].[status], [Room].[number], [Client].[login]\n" +
+        "from [Book]\n" +
+        "\tinner join [History_opr] on [Book].[id_key] = [History_opr].[id_book]\n" +
+        "\tinner join [Room] on [Room].[id] = [Book].[id_room]\n" +
+        "\tinner join [Client] on [Client].[id_key] = [Book].[id_client]\n";
+    request = new Request(sql, function (err) {
+        //request = new Request("SELECT Room.id, Room.number, Room.photo, Room.capacity, string_agg(CONCAT(Extra.name, ''), ', ') as extra, Room.cost FROM Room inner join Room_Extra on Room.id = Room_Extra.id_room inner join Extra on Extra.id = Room_Extra.id_extra group by Room.id, Room.number, Room.photo, Room.capacity, Room.cost", function (err) {
+        if (err) {
+            console.log(err);
+        }
+    });
+    var result = "";
+    var Resrows = [];
+    request.on('row', function (columns) {
+        console.log('row');
+        columns.forEach(function (column) {
+            if (column.value === null) {
+                console.log('NULL');
+            } else {
+                result += column.value + " ";
+            }
+        });
+        console.log(result);
+        result = "";
+    });
+    request.on('doneInProc', function (rowCount, more, rows) {
+        console.log(rowCount + ' rows returned');
+        console.log(rows);
+        Resrows = rows.slice;
+        console.log(' rows returned');
+        console.log(Resrows);
+        response.render("ltdoneorder", { noms: rows });;
+    });
+    connection.execSql(request);
+    //response.render("ltdoneorder");;
 });
 
 ///+
@@ -904,6 +1063,94 @@ app.get("/frmregistr.pug", function (request, response) {
 app.get("/contacts.pug", function (request, response) {
     response.render("contacts");;
 });
+
+app.post("/findorder", urlencodedParser, function (request, response) {
+    sql = "select (convert(nvarchar, [Book].[start]) + ' - ' + convert(nvarchar, [Book].[end])), [History_opr].[status], [Room].[number], [Client].[login]\n" +
+        "from [Book]\n" +
+        "\tinner join [History_opr] on [Book].[id_key] = [History_opr].[id_book]\n" +
+        "\tinner join [Room] on [Room].[id] = [Book].[id_room]\n" +
+        "\tinner join [Client] on [Client].[id_key] = [Book].[id_client]\n" +
+        "where [Book].[start] >= '";
+    sql += request.body.Dst;
+    sql += "' and [Book].[end] <= '";
+    sql += request.body.Den;
+    sql += "'";
+    console.log(sql);
+    request = new Request(sql, function (err) {
+        //request = new Request("SELECT Room.id, Room.number, Room.photo, Room.capacity, string_agg(CONCAT(Extra.name, ''), ', ') as extra, Room.cost FROM Room inner join Room_Extra on Room.id = Room_Extra.id_room inner join Extra on Extra.id = Room_Extra.id_extra group by Room.id, Room.number, Room.photo, Room.capacity, Room.cost", function (err) {
+        if (err) {
+            console.log(err);
+        }
+    });
+    var result = "";
+    var Resrows = [];
+    request.on('row', function (columns) {
+        console.log('row');
+        columns.forEach(function (column) {
+            if (column.value === null) {
+                console.log('NULL');
+            } else {
+                result += column.value + " ";
+            }
+        });
+        console.log(result);
+        result = "";
+    });
+    request.on('doneInProc', function (rowCount, more, rows) {
+        console.log(rowCount + ' rows returned');
+        console.log(rows);
+        Resrows = rows.slice;
+        console.log(' rows returned');
+        console.log(Resrows);
+        response.render("ltdoneorder", { noms: rows });;
+    });
+    connection.execSql(request);
+});
+
+app.post("/findmyorder", urlencodedParser, function (request, response) {
+    sql = "select (convert(nvarchar, [Book].[start]) + ' - ' + convert(nvarchar, [Book].[end])), [History_opr].[status], [Room].[number]\n" +
+        "from [Book]\n" +
+        "\tinner join [History_opr] on [Book].[id_key] = [History_opr].[id_book]\n" +
+        "\tinner join [Room] on [Room].[id] = [Book].[id_room]\n" +
+        "\tinner join [Client] on [Client].[id_key] = [Book].[id_client]\n" +
+        "where [Book].[start] >= '";
+    sql += request.body.Dst;
+    sql += "' and [Book].[end] <= '";
+    sql += request.body.Den;
+    sql += "' and [Client].[id_key] like '";
+    sql += idUser;
+    sql += "'";
+    console.log(sql);
+    request = new Request(sql, function (err) {
+        //request = new Request("SELECT Room.id, Room.number, Room.photo, Room.capacity, string_agg(CONCAT(Extra.name, ''), ', ') as extra, Room.cost FROM Room inner join Room_Extra on Room.id = Room_Extra.id_room inner join Extra on Extra.id = Room_Extra.id_extra group by Room.id, Room.number, Room.photo, Room.capacity, Room.cost", function (err) {
+        if (err) {
+            console.log(err);
+        }
+    });
+    var result = "";
+    var Resrows = [];
+    request.on('row', function (columns) {
+        console.log('row');
+        columns.forEach(function (column) {
+            if (column.value === null) {
+                console.log('NULL');
+            } else {
+                result += column.value + " ";
+            }
+        });
+        console.log(result);
+        result = "";
+    });
+    request.on('doneInProc', function (rowCount, more, rows) {
+        console.log(rowCount + ' rows returned');
+        console.log(rows);
+        Resrows = rows.slice;
+        console.log(' rows returned');
+        console.log(Resrows);
+        response.render("ltmyorders", { noms: rows });;
+    });
+    connection.execSql(request);
+})
 
 //начинаем прослушивать порт 3000
 app.listen(3000);

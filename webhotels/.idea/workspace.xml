@@ -24,7 +24,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../webstorm/untitled1" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -50,6 +50,7 @@
       <workItem from="1640132988327" duration="3534000" />
       <workItem from="1640137063739" duration="32113000" />
       <workItem from="1640300553042" duration="23714000" />
+      <workItem from="1640329548373" duration="9920000" />
     </task>
     <servers />
   </component>
