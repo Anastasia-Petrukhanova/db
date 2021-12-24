@@ -1,0 +1,1 @@
+insert into [Hotel] ([id], [name], [address]) values (1, N'Отель', N'г. N, ул. Некая, д. 6')

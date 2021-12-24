@@ -1,0 +1,1 @@
+Alter table [Extra] alter column [name] nvarchar(50)

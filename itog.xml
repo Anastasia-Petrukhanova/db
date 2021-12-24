@@ -1,0 +1,96 @@
+<ISSPECS>
+	<DESCRIPTION>
+		<TITLE>База данных постояльцев отелей</TITLE>
+		<SUBJ>Отели</SUBJ>
+	</DESCRIPTION>
+	<DATA>
+		<ENTITY ent_id="Клиент">
+			<PROPERTY>id</PROPERTY>
+			<PROPERTY>Фамилия</PROPERTY>
+			<PROPERTY>Имя</PROPERTY>
+			<PROPERTY>Отчество</PROPERTY>
+			<PROPERTY>Тип документа</PROPERTY>
+			<PROPERTY>Серия, номер</PROPERTY>
+      <PROPERTY>Номер телефона</PROPERTY>
+      <PROPERTY>Логин</PROPERTY>
+      <PROPERTY>Пароль</PROPERTY>
+		</ENTITY>
+		<ENTITY ent_id="breeds">
+			<PROPERTY>id</PROPERTY>
+			<PROPERTY>breed_name</PROPERTY>
+			<PROPERTY>info</PROPERTY>
+			<PROPERTY>image_path</PROPERTY>
+		</ENTITY>
+		<ENTITY ent_id="user_like_breeds">
+			<PROPERTY>BreedId</PROPERTY>
+			<PROPERTY>UserId</PROPERTY>
+		</ENTITY>
+		<ENTITY ent_id="likes">
+			<PROPERTY>BreedId</PROPERTY>
+			<PROPERTY>count</PROPERTY>
+		</ENTITY>
+		<ENTITY ent_id="cards">
+			<PROPERTY>id</PROPERTY>
+			<PROPERTY>title</PROPERTY>
+			<PROPERTY>content</PROPERTY>
+			<PROPERTY>image</PROPERTY>
+			<PROPERTY>UserId</PROPERTY>
+		</ENTITY>
+		<RELATIONSHIPS ent_ids = "users cards">
+			<PROPERTY>ONE TO MANY</PROPERTY>
+		</RELATIONSHIPS>
+		<RELATIONSHIPS ent_ids = "users user_like_breeds breeds">
+			<PROPERTY>MANY TO MANY</PROPERTY>
+		</RELATIONSHIPS>
+		<RELATIONSHIPS ent_ids = "breeds likes">
+			<PROPERTY>ONE TO ONE</PROPERTY>
+		</RELATIONSHIPS>
+		<CONSTRAINT> Ограничение NOT NULL повсеместно, кроме строки avatar_path в таблице user </CONSTRAINT>
+		<CONSTRAINT> Уникальный login у каждого пользователя </CONSTRAINT>
+		<CONSTRAINT> Для каждого нового пользователя по умолчанию роль USER </CONSTRAINT>
+		<CONSTRAINT> Уникальный breed_name у каждой породы </CONSTRAINT>
+	</DATA>
+	<ROLES>
+		<ROLE>
+			<TITLE>Сотрудник</TITLE>
+			<RESPOSIBILITY>Ввод, редактирование, просмотр информации о клиентах и номерах</RESPOSIBILITY>
+			<RESPOSIBILITY>Поиск информации о номерах, клиентах, бронированиях</RESPOSIBILITY>
+			<RESPOSIBILITY>Бронирование номера</RESPOSIBILITY>
+			<RESPOSIBILITY>Отмена бронирования номера</RESPOSIBILITY>
+			<RESPOSIBILITY>Ввод, редактирование своих контактных данных</RESPOSIBILITY>
+			<TOTALUSERS>NOT LIMITED</TOTALUSERS>
+		</ROLE>
+		<ROLE>
+			<TITLE>Авторизованный клиент</TITLE>
+			<RESPOSIBILITY>Поиск информации о номерах</RESPOSIBILITY>
+			<RESPOSIBILITY>Бронирование номера</RESPOSIBILITY>
+			<RESPOSIBILITY>Ввод, редактирование своих контактных данных</RESPOSIBILITY>
+			<RESPOSIBILITY>Просмотр своей истории операций бронирования</RESPOSIBILITY>
+			<RESPOSIBILITY>Просмотр информации о номерах</RESPOSIBILITY>
+			<RESPOSIBILITY>Подача заявки на отмену бронирования</RESPOSIBILITY>
+			<TOTALUSERS>NOT LIMITED</TOTALUSERS>
+		</ROLE>
+		<ROLE>
+			<TITLE>Неавторизованный клиент</TITLE>
+			<RESPOSIBILITY>Поиск информации о номерах</RESPOSIBILITY>
+			<RESPOSIBILITY>Просмотр информации о номерах</RESPOSIBILITY>
+			<TOTALUSERS>NOT LIMITED</TOTALUSERS>
+		</ROLE>
+	</ROLES>
+	<TECHSPEC>
+		<TYPE>Web-development</TYPE>
+		<DEVTOOLS>
+			<DEV>JavaScript</DEV>
+      <DEV>React</DEV>
+			<DEV>Python</DEV>
+			<DEV>Flask</DEV>
+		</DEVTOOLS>
+		<DBMS>
+			<TITLE>MySQL</TITLE>
+			<VERSION>8.0.26</VERSION>
+			<REASONING>Знание языка SQL</REASONING>
+			<REASONING>Удобная среда разработки - MySQL workbench</REASONING>
+			<REASONING>Наличие подробной документации и материалов в открытом доступе</REASONING>
+		</DBMS>
+	</TECHSPEC>
+</ISSPECS>
