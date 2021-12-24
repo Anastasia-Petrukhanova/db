@@ -1,0 +1,17 @@
+body {
+    font-family: Verdana, Arial, sans-serif;
+    background-color: #f7f7f7;
+}
+#header {
+    background-color: #808080;
+}
+    #header h1 {
+        font-size: 24px;
+        font-palette: normal;
+        text-transform: uppercase;
+        font-weight:  bold;
+        padding: 30px 30px 30px 10px;
+        clear: both;
+        font-style: italic;
+        background-color: #808080;
+    }

@@ -1,0 +1,37 @@
+﻿doctype html
+html
+  head
+  head
+    title Гостиница Анастасия
+style.
+  form{
+  background-color:#ffffff;
+  width:70%;
+  margin:0 auto;
+  padding:15px;
+  }
+//nav
+//  ul
+//    li
+//      a(href='/login/')
+//        | Login
+//        li
+//          a(href='/logout/')
+//            | Logout
+form(action='/loginUser', method='post')
+  fieldset
+    label
+      | Логин:
+      input(type='text', placeholder='1', name = 'loginr', min=1)
+    br
+    label
+      | Пароль:
+      input(type='text', placeholder='999999', name = 'passr', min=1)
+    br
+    label
+      button(type='submit') Вход
+      button(type='reset') Отмена
+    br
+    input(type='checkbox', name='aEmployee', value='1')
+    | Сотрудник
+

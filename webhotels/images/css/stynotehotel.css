@@ -1,0 +1,35 @@
+﻿* {
+    margin: 0px;
+    padding: 0px;
+}
+.logo {
+    margin: 0;
+    width: 200px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+    .logo img {
+        border-radius: 100px; /* CSS3 */
+        float: left;
+    }
+
+.content {
+    width: 700px;
+    margin: 5;
+    padding: 30px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .3), -23px 0 20px -23px rgba(0, 0, 0, .8), 23px 0 20px -23px rgba(0, 0, 0, .8), 0 0 40px rgba(0, 0, 0, .1) inset;
+}
+
+    .content h2 {
+        font: 30px Verdana, Arial, Helvetica, sans-serif;
+        color: #444;
+        text-align: center;
+    }
+
+    .content p {
+        font: 14px Verdana, Arial, Helvetica, sans-serif;
+        color: #444;
+        text-indent: 20px;
+    }

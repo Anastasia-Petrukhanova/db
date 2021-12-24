@@ -1,0 +1,87 @@
+﻿doctype html
+html
+  head
+    title Гостиница Анастасия
+table(border='1', bordercolor='grey', width='100%', cellpadding='5')
+  tr
+    th Номер
+    th Количество мест
+    th Удобства в номере
+    th Стоимость за сутки
+  each vr in noms
+   tr
+    td(width='10%', valign='middle', align='middle')
+     img(src=vr[2].value, width='350', height='250')
+    td(width='10%', valign='middle', align='middle') #{vr[3].value}
+    td(width='10%', valign='middle', align='middle') #{vr[4].value}
+    td(width='10%', valign='middle', align='middle') #{vr[5].value}
+// if vr.filtr == 1
+//  tr
+//   td(width='10%', valign='middle', align='left')
+//    img(src=vr.photo)
+//   td(width='10%', valign='middle', align='middle') #{vr.capacity}
+//   td(width='20%', valign='middle', align='left')
+//     if vr.utug == 1
+//      img(src='check2.png')
+//      | Утюг
+//      br
+//     else
+//      | Утюг
+//      br
+//     if vr.safe == 1
+//      img(src='check2.png')
+//      | Сейф
+//      br
+//     else
+//      | Сейф
+//      br
+//     if vr.tv == 1
+//      img(src='check2.png')
+//      | Телевизор
+//      br
+//     else
+//      | Телевизор
+//      br
+//     if vr.posuda == 1
+//      img(src='check2.png')
+//      | Посуда
+//      br
+//     else
+//      | Посуда
+//      br
+//     if vr.fen == 1
+//      img(src='check2.png')
+//      | Фен
+//      br
+//     else
+//      | Фен
+//      br
+//     if vr.holod == 1
+//      img(src='check2.png')
+//      | Холодильник
+//      br
+//     else
+//      | Холодильник
+//      br
+//     if vr.condi == 1
+//      img(src='check2.png')
+//      | Кондиционер
+//      br
+//     else
+//      | Кондиционер
+//      br
+//     if vr.lamp == 1
+//      img(src='check2.png')
+//      | Настольная лампа
+//      br
+//     else
+//      | Настольная лампа
+//      br
+//     if vr.thain == 1
+//      img(src='check2.png')
+//      | Электрочайник
+//      br
+//     else
+//      | Электрочайник
+//      br
+//   td(width='10%', valign='middle', align='middle') #{vr.cost}//

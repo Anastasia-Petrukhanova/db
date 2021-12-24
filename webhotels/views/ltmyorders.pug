@@ -1,0 +1,15 @@
+﻿doctype html
+html
+  head
+    title Гостиница Анастасия
+table(border='1', bordercolor='grey', width='100%', cellpadding='10')
+  tr
+    th Дата заказа
+    th Статус
+    th Номер
+  tr
+    each vr in noms
+      tr
+        td(width='10%', valign='middle', align='middle') #{vr[0].value}
+        td(width='10%', valign='middle', align='middle') #{vr[1].value}
+        td(width='10%', valign='middle', align='middle') #{vr[2].value}

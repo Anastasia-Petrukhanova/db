@@ -1,0 +1,41 @@
+﻿doctype html
+html
+ head
+    title Гостиница Анастасия
+ style.
+  form{
+  background-color:#ffffff;
+  width:70%;
+  margin:0 auto;
+  padding:15px;
+  }
+ body
+  form(action='/commBron', target='nomer', method='post')
+      each vr in noms
+       label
+        | ID номера:
+        input(type='text', name = 'idNom', value = idnom,readonly='')
+       br
+       label
+        | Дата заезда:
+        input(type='date', name = 'dBeg', value = dStart,readonly='')
+       br
+       label
+        | Дата выезда:
+        input(type='date', name = 'dEnd', value = dEnd,readonly='')
+       br
+       label
+        | Количество мест в номер:
+        input(type='text', name = 'idCap', value = vr[0].value ,readonly='')
+       br
+       label
+        | Цена за номер :
+        input(type='text', name = 'idCount', value = vr[1].value ,readonly='')
+       br
+       label
+        | Удобства в номере :
+        input(type='text', name = 'idExtra', value = vr[2].value ,readonly='')
+       br
+       br
+       label
+        button(type='submit') Забронировать

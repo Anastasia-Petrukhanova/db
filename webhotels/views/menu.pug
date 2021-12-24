@@ -1,0 +1,28 @@
+﻿doctype html
+html
+head
+  title Гостиница Анастасия
+font(face='Monotype Corsiva', size='6', color='#ff0000') Меню
+br
+font(face='Comic Sans MS', size='3')
+  a(href='notehotel.pug', target='osnovnoe') О гостинице
+  br
+  a(href='Nomers.pug', target='osnovnoe') Номера
+  br
+  if typeUser == 1
+   a(href='myorders.pug', target='osnovnoe') Мои заказы
+   br
+  if typeUser == 1
+   a(href='creatoredr.pug', target='osnovnoe') Забронировать номер
+   br
+  if typeUser == 2
+   a(href='doneorder.pug', target='osnovnoe') Обработка заказов
+   br
+  //<button onclick="window.location.href = '/login'">Go to Homepage</button>
+  a(href='frmlogin.pug', target='osnovnoe') Войти
+  //a(href='/', target='osnovnoe') Login/Logout
+  br
+  a(href='frmregistr.pug', target='osnovnoe') Зарегистрироваться
+  br
+  a(href='contacts.pug', target='osnovnoe') Контакты
+  br

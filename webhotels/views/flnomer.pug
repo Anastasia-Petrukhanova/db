@@ -1,0 +1,47 @@
+﻿doctype html
+html
+  head
+    title Гостиница Анастасия
+style.
+  form{
+  background-color:#ffffff;
+  width:70%;
+  margin:0 auto;
+  padding:15px;
+  }
+form(action='/nomerfind', target='nomer', method='post')
+  fieldset
+    label
+      | Количество мест в номер:
+      input(type='number', name = 'cntMest', value='1')
+    br
+    label
+      | Цена за номер до:
+      input(type='number', name = 'Price', value='999999')
+    br
+    label
+      | Удобства в номере
+    br
+    input(type='checkbox', name='aUtug', value='1')
+    | Утюг
+    input(type='checkbox', name='aSafe', value='1')
+    | Сейф
+    input(type='checkbox', name='aTV', value='1')
+    | Телевизор
+    input(type='checkbox', name='aPosuda', value='1')
+    | Посуда
+    input(type='checkbox', name='aFen', value='1')
+    | Фен
+    input(type='checkbox', name='aWiFi', value='1')
+    | Wi-Fi
+    input(type='checkbox', name='aKholod', value='1')
+    | Холодильник
+    input(type='checkbox', name='aKond', value='1')
+    | Кондиционер
+    input(type='checkbox', name='aLamp', value='1')
+    | Настольная лампа
+    input(type='checkbox', name='aChay', value='1')
+    | Электрочайник
+    br
+    label
+      button(type='submit') Поиск

@@ -1,0 +1,21 @@
+﻿doctype html
+html
+  head
+    title Гостиница Анастасия
+table(border='1', bordercolor='grey', width='100%', cellpadding='5')
+  tr
+    th
+    th Номер
+    th Количество мест
+    th Удобства в номере
+    th Стоимость за сутки
+  each vr in noms
+    tr
+     td(width='10%', valign='middle', align='middle')
+      form(action=vr[6].value, method='POST', style='display:inline;')
+       input(type='submit', value='Забронировать')
+     td(width='10%', valign='middle', align='middle')
+        img(src=vr[2].value, width='350', height='250')
+     td(width='10%', valign='middle', align='middle') #{vr[3].value}
+     td(width='10%', valign='middle', align='middle') #{vr[4].value}
+     td(width='10%', valign='middle', align='middle') #{vr[5].value}

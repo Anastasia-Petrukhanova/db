@@ -1,0 +1,3 @@
+D:\nastyhotels\webhotels\obj\Debug\webhotels.njsproj.AssemblyReference.cache
+D:\nastyhotels\webhotels\obj\Debug\webhotels.njsproj.CoreCompileInputs.cache
+D:\nastyhotels\webhotels\bin\Microsoft.NodejsTools.WebRole.dll

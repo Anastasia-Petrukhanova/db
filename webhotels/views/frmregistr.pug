@@ -1,0 +1,45 @@
+﻿doctype html
+html
+  head
+  head
+    title Гостиница Анастасия
+style.
+  form{
+  background-color:#ffffff;
+  width:70%;
+  margin:0 auto;
+  padding:15px;
+  }
+form(action='/sign', method='post')
+  fieldset
+    label
+      | Логин:
+      input(type='text', placeholder='aa', name='log')
+    br
+    label
+      | Адрес электронной почты:
+      input(type='text', placeholder='aaa', name='mail')
+    br
+    label
+      | Телефон:
+      input(type='text', placeholder='1111111', name='phone')
+    br
+    label
+      | Фамилия:
+      input(type='text', name='f')
+    br
+    label
+      | Имя:
+      input(type='text', name='i')
+    br
+    label
+      | Отчество (при наличии):
+      input(type='text', name='o')
+    br
+    label
+      | Пароль:
+      input(type='text', placeholder='999999', name='pass')
+    br
+    label
+      button(type='submit') Зарегистроваться
+      button(type='reset') Отмена
