@@ -28,6 +28,11 @@
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\webhotels_1\webhotels" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="server.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/server.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
@@ -50,7 +55,7 @@
       <workItem from="1640132988327" duration="3534000" />
       <workItem from="1640137063739" duration="32113000" />
       <workItem from="1640300553042" duration="23714000" />
-      <workItem from="1640329548373" duration="9920000" />
+      <workItem from="1640329548373" duration="12652000" />
     </task>
     <servers />
   </component>

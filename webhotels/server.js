@@ -30,8 +30,8 @@ var configdb = {
     authentication: {
         type: 'default',
         options: {
-            userName: '*******', //update me
-            password: '*******'  //update me
+            userName: 'st077348', //update me
+            password: 'fju9520tvao5s00'  //update me
         }
     },
     options: {
@@ -111,7 +111,7 @@ function InsertUser(loginUser, passUser, mailU, phoneU, iU, fU, oU) {
     connection.execSql(request);
 }
 
-function InsertHistory (idBook) {
+{/*function InsertHistory (idBook) {
     sql3 = "INSERT INTO History_opr (id_book, id_employee, status, time) VALUES (@idBook, nuul, N'Ожидается подтверждение', getdate())";
     request3 = new Request(sql1, function (err, rowCount) {
         if (err) {
@@ -122,7 +122,7 @@ function InsertHistory (idBook) {
     });
     request3.addParameter('idBook', TYPES.UniqueIdentifier, idBook);
     connection.execSql(request3);
-}
+}*/}
 
 ///?????????
 function InsertBook(User, Room, Start, End) {
@@ -139,7 +139,7 @@ function InsertBook(User, Room, Start, End) {
     request1.addParameter('dStart', TYPES.Date, Start);
     request1.addParameter('dEnd', TYPES.Date, End);
     console.log(sql1);
-    request1.on('doneInProc', function (rowCount, more, rows) {
+    {/*request1.on('doneInProc', function (rowCount, more, rows) {
         var idBook = "";
         sql2 = "select Book.id_key from Book where Book.start = '";
         sql2 += Start;
@@ -173,7 +173,7 @@ function InsertBook(User, Room, Start, End) {
         request2.on('doneInProc', function (rowCount, more, rows) {
             console.log(rowCount + ' rows returned');
             console.log(rows);
-            sql3 = "INSERT INTO History_opr (id_book, id_employee, status, [time]) VALUES (@idBook, nuul, N'Ожидается подтверждение', getdate())";
+            sql3 = "INSERT INTO History_opr (id_book, id_employee, status, [time]) VALUES (@idBook, null, N'Ожидается подтверждение', getdate())";
             request3 = new Request(sql1, function (err, rowCount) {
                 if (err) {
                     console.log(err);
@@ -190,8 +190,8 @@ function InsertBook(User, Room, Start, End) {
         });
         console.log("req2")
         connection.execSql(request2);
-    });
-    console.log("req3")
+    });*/}
+    //console.log("req3")
     connection.execSql(request1);
 
     {/*var idBook = "";
@@ -484,6 +484,7 @@ app.post("/addbron/:id", urlencodedParser, function (request, response) {
 ////??????
 app.post("/commBron", urlencodedParser, function (request, response) {
     InsertBook(idUser, request.body.idNom, dStart, dEnd);
+    response.end('Бронирование отправлено!')
 });
 
 ///+
