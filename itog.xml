@@ -9,65 +9,106 @@
 			<PROPERTY>Фамилия</PROPERTY>
 			<PROPERTY>Имя</PROPERTY>
 			<PROPERTY>Отчество</PROPERTY>
-			<PROPERTY>Тип документа</PROPERTY>
-			<PROPERTY>Серия, номер</PROPERTY>
-      <PROPERTY>Номер телефона</PROPERTY>
-      <PROPERTY>Логин</PROPERTY>
-      <PROPERTY>Пароль</PROPERTY>
+			<PROPERTY>Mail</PROPERTY>
+			<PROPERTY>Номер телефона</PROPERTY>
+      			<PROPERTY>Логин</PROPERTY>
+      			<PROPERTY>Пароль</PROPERTY>
 		</ENTITY>
-		<ENTITY ent_id="breeds">
-			<PROPERTY>id</PROPERTY>
-			<PROPERTY>breed_name</PROPERTY>
-			<PROPERTY>info</PROPERTY>
-			<PROPERTY>image_path</PROPERTY>
-		</ENTITY>
-		<ENTITY ent_id="user_like_breeds">
-			<PROPERTY>BreedId</PROPERTY>
-			<PROPERTY>UserId</PROPERTY>
-		</ENTITY>
-		<ENTITY ent_id="likes">
-			<PROPERTY>BreedId</PROPERTY>
-			<PROPERTY>count</PROPERTY>
-		</ENTITY>
-		<ENTITY ent_id="cards">
-			<PROPERTY>id</PROPERTY>
-			<PROPERTY>title</PROPERTY>
-			<PROPERTY>content</PROPERTY>
-			<PROPERTY>image</PROPERTY>
-			<PROPERTY>UserId</PROPERTY>
-		</ENTITY>
-		<RELATIONSHIPS ent_ids = "users cards">
-			<PROPERTY>ONE TO MANY</PROPERTY>
-		</RELATIONSHIPS>
-		<RELATIONSHIPS ent_ids = "users user_like_breeds breeds">
-			<PROPERTY>MANY TO MANY</PROPERTY>
-		</RELATIONSHIPS>
-		<RELATIONSHIPS ent_ids = "breeds likes">
-			<PROPERTY>ONE TO ONE</PROPERTY>
-		</RELATIONSHIPS>
-		<CONSTRAINT> Ограничение NOT NULL повсеместно, кроме строки avatar_path в таблице user </CONSTRAINT>
+		<CONSTRAINT> Ограничение NOT NULL повсеместно, кроме строки Отчество в таблице Client </CONSTRAINT>
 		<CONSTRAINT> Уникальный login у каждого пользователя </CONSTRAINT>
 		<CONSTRAINT> Для каждого нового пользователя по умолчанию роль USER </CONSTRAINT>
-		<CONSTRAINT> Уникальный breed_name у каждой породы </CONSTRAINT>
+		<ENTITY ent_id="Сотрудник">
+			<PROPERTY>id</PROPERTY>
+			<PROPERTY>Фамилия</PROPERTY>
+			<PROPERTY>Имя</PROPERTY>
+			<PROPERTY>Отчество</PROPERTY>
+      			<PROPERTY>Логин</PROPERTY>
+      			<PROPERTY>Пароль</PROPERTY>
+		</ENTITY>
+		<CONSTRAINT> Ограничение NOT NULL повсеместно, кроме строки Отчество в таблице Сотрудник </CONSTRAINT>
+		<CONSTRAINT> Уникальный login у каждого пользователя </CONSTRAINT>
+		<CONSTRAINT> Для каждого нового пользователя по умолчанию роль Employee </CONSTRAINT>
+	
+		<ENTITY ent_id="Отели">
+			<PROPERTY>id</PROPERTY>
+			<PROPERTY>Название</PROPERTY>
+			<PROPERTY>Адрес</PROPERTY>
+		</ENTITY>
+		<CONSTRAINT> Ограничение NOT NULL повсеместно </CONSTRAINT>
+	
+		<ENTITY ent_id="Команты">
+			<PROPERTY>id</PROPERTY>
+			<PROPERTY>Номер</PROPERTY>
+			<PROPERTY>Стоимость</PROPERTY>
+			<PROPERTY>Вместимость</PROPERTY>
+			<PROPERTY>id отеля</PROPERTY>
+			<PROPERTY>Фото</PROPERTY>
+			<PROPERTY>Статус</PROPERTY>
+		</ENTITY>
+		<CONSTRAINT> Ограничение NOT NULL повсеместно </CONSTRAINT>
+		<CONSTRAINT> Фото хранится в виде ссылки </CONSTRAINT>
+	
+		<ENTITY ent_id="Дополнительно">
+			<PROPERTY>id</PROPERTY>
+			<PROPERTY>Наименование</PROPERTY>
+		</ENTITY>
+		<CONSTRAINT> Ограничение NOT NULL повсеместно </CONSTRAINT>
+
+		<ENTITY ent_id="Связь дополнительного и комнаты">
+			<PROPERTY>id</PROPERTY>
+			<PROPERTY>id комнаты</PROPERTY>
+			<PROPERTY>id дополнительного</PROPERTY>
+		</ENTITY>
+		<CONSTRAINT> Ограничение NOT NULL повсеместно </CONSTRAINT>
+	
+		<ENTITY ent_id="Бронирование">
+			<PROPERTY>id</PROPERTY>
+			<PROPERTY>id комнаты</PROPERTY>
+			<PROPERTY>id клиента</PROPERTY>
+			<PROPERTY>дата заезда</PROPERTY>
+			<PROPERTY>дата выезда</PROPERTY>
+		</ENTITY>
+		<CONSTRAINT> Ограничение NOT NULL повсеместно </CONSTRAINT>
+	
+		<ENTITY ent_id="История операций">
+			<PROPERTY>id</PROPERTY>
+			<PROPERTY>id бронирования</PROPERTY>
+			<PROPERTY>id сотрудника</PROPERTY>
+			<PROPERTY>статус</PROPERTY>
+			<PROPERTY>время</PROPERTY>
+		</ENTITY>
+		<CONSTRAINT> Ограничение NOT NULL повсеместно, кроме id сотрудника </CONSTRAINT>
+		<RELATIONSHIPS ent_ids = "Отели-комнаты">
+			<PROPERTY>ONE TO MANY</PROPERTY>
+		</RELATIONSHIPS>
+		<RELATIONSHIPS ent_ids = "Клиент-бронирование">
+			<PROPERTY>ONE TO MANY</PROPERTY>
+		</RELATIONSHIPS>
+		<RELATIONSHIPS ent_ids = "Номер-бронирование">
+			<PROPERTY>ONE TO MANY</PROPERTY>
+		<RELATIONSHIPS ent_ids = "Номер-таблица связи с дополнительным">
+			<PROPERTY>ONE TO MANY</PROPERTY>
+		<RELATIONSHIPS ent_ids = "Дополнительное-таблица связи с дополнительным">
+			<PROPERTY>ONE TO MANY</PROPERTY>
+		<RELATIONSHIPS ent_ids = "Бронирование-История операций">
+			<PROPERTY>ONE TO MANY</PROPERTY>
+		<RELATIONSHIPS ent_ids = "Сотрудник-История операций">
+			<PROPERTY>ONE TO MANY</PROPERTY>
 	</DATA>
 	<ROLES>
 		<ROLE>
 			<TITLE>Сотрудник</TITLE>
-			<RESPOSIBILITY>Ввод, редактирование, просмотр информации о клиентах и номерах</RESPOSIBILITY>
-			<RESPOSIBILITY>Поиск информации о номерах, клиентах, бронированиях</RESPOSIBILITY>
-			<RESPOSIBILITY>Бронирование номера</RESPOSIBILITY>
-			<RESPOSIBILITY>Отмена бронирования номера</RESPOSIBILITY>
-			<RESPOSIBILITY>Ввод, редактирование своих контактных данных</RESPOSIBILITY>
+			<RESPOSIBILITY>Просмотр информации о заказах клиентов</RESPOSIBILITY>
+			<RESPOSIBILITY>Подтверждение или отмена бронирования номера (возможно)</RESPOSIBILITY>
 			<TOTALUSERS>NOT LIMITED</TOTALUSERS>
 		</ROLE>
 		<ROLE>
 			<TITLE>Авторизованный клиент</TITLE>
 			<RESPOSIBILITY>Поиск информации о номерах</RESPOSIBILITY>
 			<RESPOSIBILITY>Бронирование номера</RESPOSIBILITY>
-			<RESPOSIBILITY>Ввод, редактирование своих контактных данных</RESPOSIBILITY>
 			<RESPOSIBILITY>Просмотр своей истории операций бронирования</RESPOSIBILITY>
 			<RESPOSIBILITY>Просмотр информации о номерах</RESPOSIBILITY>
-			<RESPOSIBILITY>Подача заявки на отмену бронирования</RESPOSIBILITY>
+			<RESPOSIBILITY>Подача заявки на отмену бронирования (возможно)</RESPOSIBILITY>
 			<TOTALUSERS>NOT LIMITED</TOTALUSERS>
 		</ROLE>
 		<ROLE>
@@ -80,16 +121,13 @@
 	<TECHSPEC>
 		<TYPE>Web-development</TYPE>
 		<DEVTOOLS>
-			<DEV>JavaScript</DEV>
-      <DEV>React</DEV>
-			<DEV>Python</DEV>
-			<DEV>Flask</DEV>
+			<DEV>Node js (E[hress)</DEV>
 		</DEVTOOLS>
 		<DBMS>
-			<TITLE>MySQL</TITLE>
-			<VERSION>8.0.26</VERSION>
+			<TITLE>MS SQL Server</TITLE>
+			<VERSION>18.10</VERSION>
 			<REASONING>Знание языка SQL</REASONING>
-			<REASONING>Удобная среда разработки - MySQL workbench</REASONING>
+			<REASONING>Удобная среда разработки - MS SQL Server Managment Studio</REASONING>
 			<REASONING>Наличие подробной документации и материалов в открытом доступе</REASONING>
 		</DBMS>
 	</TECHSPEC>
