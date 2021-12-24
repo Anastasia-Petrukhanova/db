@@ -30,8 +30,8 @@ var configdb = {
     authentication: {
         type: 'default',
         options: {
-            userName: 'st077348', //update me
-            password: 'fju9520tvao5s00'  //update me
+            userName: '*******', //update me
+            password: '*******'  //update me
         }
     },
     options: {
